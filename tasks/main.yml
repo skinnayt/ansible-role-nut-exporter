@@ -37,6 +37,7 @@
     name: nut_exporter
     shell: /sbin/nologin
     state: present
+  when: nut_exporter_user == ""
 
 - name: Copy the nut_exporter systemd unit file.
   template:

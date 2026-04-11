@@ -19,3 +19,5 @@ nut_exporter_options: ''
 nut_exporter_state: started
 nut_exporter_enabled: true
 nut_exporter_restart: on-failure
+
+nut_exporter_user: ""
