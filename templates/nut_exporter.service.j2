@@ -3,7 +3,9 @@ Description=NutExporter
 
 [Service]
 TimeoutStartSec=0
-User={% if nut_exporter_user is defined and nut_exporter_user != "" %}{{ nut_exporter_user }}{% else %}nut_exporter{% endif %}
+User={% if nut_exporter_user is defined and nut_exporter_user != "" %}{{ nut_exporter_user }}
+{% else %}nut_exporter
+{% endif %}
 ExecStart={{ nut_exporter_bin_path }} --web.listen-address={{ nut_exporter_host }}:{{ nut_exporter_port }} {{ nut_exporter_options }}
 Restart={{ nut_exporter_restart }}
 
