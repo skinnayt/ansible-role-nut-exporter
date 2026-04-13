@@ -20,8 +20,10 @@
     nut_exporter_version_check.stdout is not defined
     or nut_exporter_version not in nut_exporter_version_check.stdout
   register: nut_exporter_download_check
+  check_mode: false
 
 - name: Move nut_exporter binary into place.
+  become: true
   copy:
     src: "/tmp/nut_exporter-v{{ nut_exporter_version }}-linux-{{ nut_exporter_arch }}"
     dest: "{{ nut_exporter_bin_path }}"
@@ -33,6 +35,7 @@
     or nut_exporter_version_check.stdout | length == 0
 
 - name: Create nut_exporter user.
+  become: true
   user:
     name: nut_exporter
     shell: /sbin/nologin
@@ -40,6 +43,7 @@
   when: nut_exporter_user == ""
 
 - name: Copy the nut_exporter systemd unit file.
+  become: true
   template:
     src: nut_exporter.service.j2
     dest: /etc/systemd/system/nut_exporter.service
@@ -47,12 +51,14 @@
   register: nut_exporter_service
 
 - name: Reload systemd daemon if unit file is changed.
+  become: true
   systemd:
     daemon_reload: true
   notify: restart nut_exporter
   when: nut_exporter_service is changed
 
 - name: Ensure nut_exporter is running and enabled at boot.
+  become: true
   service:
     name: nut_exporter
     state: "{{ nut_exporter_state }}"
